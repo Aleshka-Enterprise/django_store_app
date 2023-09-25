@@ -73,7 +73,9 @@
                                     <h5 style="position: absolute; bottom: 0; left: 65px">{{ product.price }} руб.</h5>
                                 </div>
                                 <div class="card-footer text-center">
-                                    <button type="button" class="btn btn-outline-success">Отправить в корзину</button>
+                                    <a  class="btn btn-outline-success" href="{% url 'basket:add' product.id %}">
+                                        Отправить в корзину
+                                    </a>
                                 </div>
                             </div>
                         </div>

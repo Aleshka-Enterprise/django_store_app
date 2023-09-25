@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'products',
     'user',
+    'basket',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +132,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # User
 AUTH_USER_MODEL = 'user.User'
+LOGIN_REDIRECT_URL = '/user/login/'
