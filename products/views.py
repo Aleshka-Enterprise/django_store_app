@@ -1,25 +1,28 @@
-from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.views.generic import TemplateView, ListView
+
+from common.views import TitleMixin
 from products.models import Product, ProductCategory
 
 
-def index(request):
-    return render(request, 'products/index.html', {'title': 'Store'})
+class IndexView(TitleMixin, TemplateView):
+    title = 'Store'
+    template_name = 'products/index.html'
 
 
-def products(request, category_id=0, page=1):
-    if category_id:
-        products_list = Product.objects.filter(category_id=category_id)
-    else:
-        products_list = Product.objects.all()
+class ProductsListView(TitleMixin, ListView):
+    paginate_by = 3
+    title = 'Store - Каталог'
+    template_name = 'products/products.html'
+    model = Product
 
-    products_paginator = Paginator(products_list, 3)
+    def get_queryset(self):
+        queryset = super(ProductsListView, self).get_queryset()
+        category_id = self.kwargs.get('category_id')
+        return queryset.filter(category_id=self.kwargs.get('category_id')) if category_id else queryset
 
-    context = {
-        'title': 'Store - Каталог',
-        'products_paginator': products_paginator.page(page),
-        'categories': ProductCategory.objects.all(),
-        'current_page': page,
-        'category_id': category_id,
-    }
-    return render(request, 'products/products.html', context)
+    def get_context_data(self, **kwargs):
+        context = super(ProductsListView, self).get_context_data(**kwargs)
+        context['categories'] = ProductCategory.objects.all()
+        context['category_id'] = self.kwargs.get('category_id', 0)
+        context['current_page'] = self.kwargs.get('page', 1)
+        return context

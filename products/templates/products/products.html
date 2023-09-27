@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="row">
-                    {% for product in products_paginator %}
+                    {% for product in page_obj %}
                         <div class="col-lg-4 col-md-6 mb-4">
                             <div class="card h-100">
                                 <a href="#">
@@ -85,12 +85,12 @@
 
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
-                        <li class="page-item {% if not products_paginator.has_previous %}disabled{% endif %}">
+                        <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
                             <a
                                 class="page-link"
                                 href="
-                                    {% if products_paginator.has_previous %}
-                                          {% url 'products:products_by_category' products_paginator.previous_page_number category_id %}
+                                    {% if page_obj.has_previous %}
+                                          {% url 'products:products_by_category' page_obj.previous_page_number category_id %}
                                     {% endif %}"
                                 tabindex="-1"
                                 aria-disabled="true"
@@ -98,7 +98,7 @@
                                 Предыдущая
                             </a>
                         </li>
-                        {% for page in products_paginator.paginator.page_range %}
+                        {% for page in page_obj.paginator.page_range %}
                             <li class="page-item">
                                 <a
                                     style="{% if page == current_page %}
@@ -111,12 +111,12 @@
                                 </a>
                             </li>
                         {% endfor %}
-                        <li class="page-item {% if not products_paginator.has_next %}disabled{% endif %}">
+                        <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
                             <a
                                 class="page-link"
                                 href="
-                                    {% if products_paginator.has_next %}
-                                          {% url 'products:products_by_category' products_paginator.next_page_number category_id %}
+                                    {% if page_obj.has_next %}
+                                          {% url 'products:products_by_category' page_obj.next_page_number category_id %}
                                     {% endif %}"
                                 tabindex="-1"
                                 aria-disabled="true"
