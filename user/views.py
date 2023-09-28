@@ -1,10 +1,11 @@
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.utils.timezone import now
+from django.views.generic import CreateView, UpdateView, TemplateView
 
 from user.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 from basket.models import Basket
-from user.models import User
+from user.models import User, EmailVerification
 
 
 class UserRegistrationView(CreateView):
@@ -31,3 +32,19 @@ class ProfileView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('user:profile', kwargs={'pk': self.request.user.id})
+
+
+class UserVerificationView(TemplateView):
+    template_name = 'user/email_verification.html'
+
+    def get(self, request, *args, **kwargs):
+        res = super(UserVerificationView, self).get(self, request, *args, **kwargs)
+        verification_record = EmailVerification.objects.filter(uuid=kwargs.get('id'))
+        if verification_record.exists():
+            verification_record = verification_record.first()
+            if now() < verification_record.date_of_expiration:
+                user = verification_record.user
+                user.email_is_verified = True
+                user.save()
+
+        return res
