@@ -9,6 +9,9 @@ pip install -r requirements.txt
 ```
 
 ## Запуск
+### Подключение к Postgres
+Название базы данных: **store_db** \
+Логин и пароль по умочанию: **postgres admin**
 ### Произвести миграции
 ```
 python manage.py migrate

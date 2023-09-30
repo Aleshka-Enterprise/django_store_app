@@ -8,6 +8,7 @@ urlpatterns = [
     path('', include('products.urls', namespace='products')),
     path('user/', include('user.urls', namespace='user')),
     path('basket/', include('basket.urls', namespace='basket')),
+    path('accounts/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:
